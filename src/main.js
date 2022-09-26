@@ -14,6 +14,8 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+import { imgerror } from '@/directives'
+Vue.directive('imgerror',imgerror)
 
 /**
  * If you don't want to use mock-server
