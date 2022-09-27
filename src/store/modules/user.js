@@ -4,7 +4,8 @@ export default {
   namespaced: true,
   state: {
     token: null,
-    userInfo:{}
+    userInfo: {},
+    hrsaasTime:''
   },
   mutations: {
     SET_TOKEN(state, token) {
@@ -14,24 +15,32 @@ export default {
       state.userInfo=userInfo
     },
     RMOVE_USER_INFO(state) {
-      state.userInfo={}
+      state.userInfo=''
+    },
+    REMOVE_TOKEN(state) {
+      state.token=''
+    },
+    SET_HRSAAS_TIME(state, hrsaasTime) {
+      state.hrsaasTime=hrsaasTime
     }
   },
   actions: {
    async loginAction({ commit },loginData) {
       const data = await login(loginData)
-      console.log(data);
-      commit("SET_TOKEN",data)
+      commit("SET_TOKEN", data)
+      commit("SET_HRSAAS_TIME",new Date().getTime())
     },
     async getUserInfo({ commit }) {
       //接口要求
       const res = await getUserInfo() 
-      console.log(res);
       const res1=await getUserDetailById(res.userId)
-      console.log(res1);
       const result ={...res,...res1}
       commit('SET_USER_INFO', result)
       return JSON.parse(JSON.stringify(result))
+    },
+    async logout({commit}) {
+       commit("RMOVE_USER_INFO"),
+        commit("REMOVE_TOKEN")
     }
   }
 }

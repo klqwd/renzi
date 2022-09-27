@@ -71,7 +71,7 @@ export default {
       loading: false,
       passwordType: "password",
       loginForm: {
-        mobile: "1382",
+        mobile: "13800000002",
         password: "123456",
       },
       rules: {
@@ -112,7 +112,7 @@ export default {
     },
     async login() {
       try {
-        await this.$refs.loginForm.validate();
+        const res = await this.$refs.loginForm.validate();
         this.loading = true;
         await this.$store.dispatch("user/loginAction", this.loginForm);
       } finally {
