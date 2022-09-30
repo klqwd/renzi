@@ -13,7 +13,7 @@ function IsCheckTimeOut() {
 //通过axios创建axios实例
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
-  timeout:5000,
+  timeout:50000,
 })
 
 // axios响应拦截器
