@@ -16,11 +16,25 @@
         />
       </el-form-item>
       <el-form-item label="部门编码" prop="code">
-        <el-input style="width: 80%" placeholder="1-50个字符" />
+        <el-input
+          style="width: 80%"
+          placeholder="1-50个字符"
+          v-model="formData.code"
+        />
       </el-form-item>
       <el-form-item label="部门负责人" prop="manager">
-        <el-select style="width: 80%" placeholder="请选择">
-          <el-option label="username11" value="username" />
+        <el-select
+          v-model="formData.manager"
+          style="width: 80%"
+          placeholder="请选择"
+          @focus="getEmployee"
+        >
+          <el-option
+            :label="item.username"
+            :value="item.username"
+            v-for="item in peoples"
+            :key="item.id"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="部门介绍" prop="introduce">
@@ -37,15 +51,23 @@
     <el-row slot="footer" type="flex" justify="center">
       <!-- 列被分为24 -->
       <el-col :span="6">
-        <el-button type="primary" size="small">确定</el-button>
-        <el-button size="small">取消</el-button>
+        <el-button
+          type="primary"
+          size="small"
+          @click="submit"
+          v-loading="loading"
+          >确定</el-button
+        >
+        <el-button size="small" @click="handleClose">取消</el-button>
       </el-col>
     </el-row>
   </el-dialog>
 </template>
 
 <script>
-import getDepartments from "@/api/department";
+import { getDepartments, addDepartments } from "@/api/department";
+import { getEmployee } from "@/api/employee";
+
 export default {
   props: {
     name: "HrsaasAddDept",
@@ -88,6 +110,8 @@ export default {
         manager: "", // 部门管理者
         introduce: "", // 部门介绍
       },
+      peoples: [],
+      loading: false,
       rules: {
         name: [
           { required: true, message: "部门名称必填", trigger: "blur" },
@@ -118,6 +142,35 @@ export default {
     handleClose() {
       this.$emit("update:dialogVisible", false);
       this.$refs.addDeptForm.resetFields();
+      this.formData = {
+        name: "", // 部门名称
+        code: "", // 部门编码
+        manager: "", // 部门管理者
+        introduce: "", // 部门介绍
+      };
+    },
+    async getEmployee() {
+      this.peoples = await getEmployee();
+      console.log(peoples);
+    },
+    //提交数据
+    async submit() {
+      try {
+        await this.$refs.addDeptForm.validate();
+        //调用接口
+        this.loading = true;
+        await addDepartments({ ...this.formData, pid: this.treeNode.id });
+        //提示成功
+        this.$message("新增成功");
+        //重新刷新页面
+        this.$parent.getDepartments();
+        //关闭页面
+        this.handleClose();
+      } catch (e) {
+        console.log(e);
+      } finally {
+        this.loading = false;
+      }
     },
   },
 };

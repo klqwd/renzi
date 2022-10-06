@@ -16,6 +16,23 @@ const service = axios.create({
   timeout:50000,
 })
 
+//axios请求拦截器
+service.interceptors.request.use(config => {
+  // 在这个位置需要统一的去注入token
+  if (store.getters.token) {
+    // 如果token存在 注入token
+    if (IsCheckTimeOut()) {
+      store.dispatch("user/logout")
+      router.push('/login')
+      return Promise.reject(new Error("登录超时"))
+    }
+    config.headers['Authorization'] = `Bearer ${store.getters.token}`
+  }
+  return config // 必须返回配置
+}, error => {
+  return Promise.reject(error)
+})
+
 // axios响应拦截器
 service.interceptors.response.use(response => { 
   const { success, message, data } = response.data
@@ -36,21 +53,6 @@ service.interceptors.response.use(response => {
     return Promise.reject(error)
 })
 
-//axios请求拦截器
-service.interceptors.request.use(config => {
-  // 在这个位置需要统一的去注入token
-  if (store.getters.token) {
-    // 如果token存在 注入token
-    if (IsCheckTimeOut()) {
-      store.dispatch("user/logout")
-      router.push('/login')
-      return Promise.reject(new Error("登录超时"))
-    }
-    config.headers['Authorization'] = `Bearer ${store.getters.token}`
-  }
-  return config // 必须返回配置
-}, error => {
-  return Promise.reject(error)
-}) 
+ 
 
 export default service
