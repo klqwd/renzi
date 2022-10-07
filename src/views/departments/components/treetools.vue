@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { delDepartments } from "@/api/department";
 export default {
   name: "treetools",
   props: {
@@ -59,12 +60,27 @@ export default {
       if (type === "add") {
         this.$emit("addDept", this.treeNode);
       } else if (type === "edit") {
+        //编辑
+        this.$emit("editDept", this.treeNode);
       } else {
+        //del
+        //实现删除逻辑
+        //二次确认
+        this.$confirm("是否确认删除该部门", "提示", {
+          type: "warning",
+        })
+          .then(async (res) => {
+            return delDepartments(this.treeNode.id);
+          })
+          .then((res) => {
+            this.$message.success("删除成功");
+            this.$emit("refreshList");
+          });
       }
     },
-    handleAddDept() {
-      this.dialogVisible = true;
-    },
+  },
+  handleAddDept() {
+    this.dialogVisible = true;
   },
 };
 </script>
