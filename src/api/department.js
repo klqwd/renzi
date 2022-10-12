@@ -39,4 +39,4 @@ export function updateDepartments(data) {
       url: `/company/department/${id}`,
       method: 'delete'
     })
-  }
+}

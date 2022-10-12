@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import * as XLSX from 'xlsx'
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
@@ -16,6 +17,9 @@ import '@/icons' // icon
 import '@/permission' // permission control
 import { imgerror } from '@/directives'
 Vue.directive('imgerror',imgerror)
+
+import components from '@/components'
+Vue.use(components)
 
 /**
  * If you don't want to use mock-server
