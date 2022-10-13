@@ -13,7 +13,6 @@ const components = fn.keys().map(ele => fn(ele))
 // Vue.use
 export default (Vue)=> {
         components.forEach(ele => {
-            console.log(ele);
             Vue.component(ele.default.name,ele.default)
         })
     //Vue.filter('过滤器名称',过滤器的方法)

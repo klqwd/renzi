@@ -12,4 +12,8 @@ export const getUserDetailById = (id) => request({
   methods:'get'
 })
 
-  
+export const saveUserDetailById = (data) => request({
+  url: `/sys/user/${data.id}`,
+  methods: 'put',
+  data
+})
