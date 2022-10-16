@@ -6,18 +6,21 @@
       :before-upload="beforeUpload"
       :on-success="handleSuccess"
     ></UploadExcel>
+    <UploadImg @on-success="onSuccess"></UploadImg>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-
+import UploadImg from "@/components/UploadImg";
 export default {
   name: "Dashboard",
   computed: {
     ...mapGetters(["name"]),
   },
-
+  components: {
+    UploadImg,
+  },
   methods: {
     handleSuccess(data) {
       console.log("data", data);
@@ -29,6 +32,10 @@ export default {
         return false;
       }
       return true;
+    },
+    onSuccess(mes) {
+      console.log("上传成功");
+      console.log(mes);
     },
   },
 };

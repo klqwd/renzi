@@ -96,3 +96,11 @@ export function updatePersonal(data) {
     data
   })
 }
+/**
+ * 获取员工岗位信息
+ */
+export function getEmployeeJobInfo(id) {
+  return request({
+    url:`/employees/${id}/jobs`
+  })
+}
